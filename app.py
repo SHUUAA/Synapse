@@ -81,44 +81,7 @@ if user_prompt:
 
 # Add a sidebar with information
 with st.sidebar:
-    st.header("About")
+    st.header("More Info")
     st.markdown("""
-    This chatbot uses Google's Gemini AI model to generate responses to your questions.
-    
-    Enter your message in the chat input below and press Enter to send.
-    """)
-    
-    # Add model selection dropdown
-    st.header("Model Settings")
-    model_option = st.selectbox(
-        "Select Gemini Model",
-        ["gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.0-pro"],
-        index=0
-    )
-    
-    # Update the function to use the selected model
-    def update_model():
-        st.session_state.selected_model = model_option
-    
-    if "selected_model" not in st.session_state:
-        st.session_state.selected_model = "gemini-2.0-flash"
-    
-    st.button("Apply Model", on_click=update_model)
-    
-    st.header("Chat Settings")
-    if st.button("Clear Chat History"):
-        st.session_state.messages = []
-        st.rerun()
-        
-    st.header("Usage Tips")
-    st.markdown("""
-    **Free Tier Limitations:**
-    - The free tier has rate limits
-    - Keep questions concise for best results
-    - If you hit rate limits, wait a few moments
-    
-    **Helpful Prompts:**
-    - "Explain [topic]"
-    - "Help me with [problem]"
-    - "Write a [content type] about [topic]"
+    Creating more contents soon...
     """)
