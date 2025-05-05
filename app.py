@@ -18,7 +18,7 @@ model = genai.GenerativeModel(model_name=st.session_state.get("selected_model", 
 
 # Set page configuration
 st.set_page_config(
-    page_title="Gemini Chatbot",
+    page_title="Synapse AI",
     page_icon="🤖",
     layout="wide"
 )
