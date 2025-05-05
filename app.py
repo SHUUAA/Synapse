@@ -84,7 +84,12 @@ if user_prompt:
 
 # Add a sidebar with information
 with st.sidebar:
-    st.header("More Info")
+    st.header("About")
     st.markdown("""
-    Creating more contents soon...
+    This chatbot uses Synapse AI's Gemini AI model to generate responses to your questions.
+    Joshua Robert Rebadomia created this chatbot.
     """)
+    if st.button("Clear Chat"):
+        st.session_state.messages = []
+        st.rerun()
+    
