@@ -1,7 +1,9 @@
 import streamlit as st
 import os
 from dotenv import load_dotenv
-from google import genai
+# from google import genai
+import google.generativeai as genai
+
 
 
 # Load environment variables
@@ -9,7 +11,10 @@ load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 # Configure the Gemini API with the newer client approach
-client = genai.Client(api_key=GEMINI_API_KEY)
+# client = genai.Client(api_key=GEMINI_API_KEY)
+genai.configure(api_key=GEMINI_API_KEY)
+model = genai.GenerativeModel(model_name=st.session_state.get("selected_model", "gemini-2.0-flash"))
+
 
 # Set page configuration
 st.set_page_config(
@@ -39,23 +44,20 @@ for message in st.session_state.messages:
 # Function to generate response from Gemini using the updated API
 def generate_gemini_response(prompt):
     try:
-        # Using the newer client approach
-        response = client.models.generate_content(
-            model="gemini-2.0-flash",  # Using the newer model you referenced
-            contents=prompt
-        )
-        
-        # Check if we have a valid response
+        model = genai.GenerativeModel(st.session_state.get("selected_model", "gemini-2.0-flash"))
+        response = model.generate_content(prompt)
+
         if hasattr(response, 'text') and response.text:
             return response.text
         else:
             return "I couldn't generate a response. Please try again."
-            
+
     except Exception as e:
         if "quota" in str(e).lower() or "rate" in str(e).lower() or "limit" in str(e).lower():
             return "⚠️ API rate limit reached. Please wait a moment before trying again."
         else:
             return f"An error occurred: {str(e)}"
+
 
 # Get user input
 user_prompt = st.chat_input("Ask something...")
