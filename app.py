@@ -25,7 +25,7 @@ st.set_page_config(
 
 # App title
 st.title("🤖 Synapse")
-st.markdown("Chat with Gemini AI model")
+st.markdown("Chat with Synapse AI")
 
 # Check if API key is valid
 if not GEMINI_API_KEY:
