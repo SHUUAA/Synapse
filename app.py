@@ -1,9 +1,7 @@
 import streamlit as st
 import os
 from dotenv import load_dotenv
-# from google import genai
 import google.generativeai as genai
-
 
 
 # Load environment variables
@@ -11,9 +9,7 @@ load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 # Configure the Gemini API with the newer client approach
-# client = genai.Client(api_key=GEMINI_API_KEY)
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel(model_name=st.session_state.get("selected_model", "gemini-2.0-flash"))
 
 
 # Set page configuration
@@ -44,8 +40,15 @@ for message in st.session_state.messages:
 # Function to generate response from Gemini using the updated API
 def generate_gemini_response(prompt):
     try:
-        model = genai.GenerativeModel(st.session_state.get("selected_model", "gemini-2.0-flash"))
-        response = model.generate_content(prompt)
+        model = genai.GenerativeModel(model_name=st.session_state.get("selected_model", "gemini-2.0-flash"))
+
+        # Build the conversation history into the prompt.  This is key to maintaining context.
+        conversation = ""
+        for msg in st.session_state.messages:
+            conversation += f"{msg['role']}: {msg['content']}\n"
+        conversation += f"user: {prompt}\nassistant:"  # Append current user prompt
+
+        response = model.generate_content(conversation)
 
         if hasattr(response, 'text') and response.text:
             return response.text
@@ -65,17 +68,17 @@ user_prompt = st.chat_input("Ask something...")
 if user_prompt:
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": user_prompt})
-    
+
     # Display user message in chat message container
     with st.chat_message("user"):
         st.markdown(user_prompt)
-    
+
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
             response = generate_gemini_response(user_prompt)
             st.markdown(response)
-    
+
     # Add assistant response to chat history
     st.session_state.messages.append({"role": "assistant", "content": response})
 
